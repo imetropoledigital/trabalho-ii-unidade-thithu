@@ -4,7 +4,7 @@ services:
   mongo:
     build:
       context: .
-      dockerfile: Dockerfile.mongo
+      dockerfile: ./api/Dockerfile.mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin123
@@ -17,7 +17,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.app
+      dockerfile: ./api/Dockerfile.app
     environment:
       SPRING_DATA_MONGODB_URI: mongodb://admin:admin123@mongo:27017/admin
     ports:
