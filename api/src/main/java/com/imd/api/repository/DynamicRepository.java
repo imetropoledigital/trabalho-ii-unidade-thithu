@@ -42,9 +42,4 @@ public class DynamicRepository {
   public long count(Query query, String collectionName) {
     return mongoTemplate.count(query, collectionName);
   }
-
-
-
-
-
 }
