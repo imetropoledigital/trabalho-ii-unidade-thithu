@@ -46,21 +46,12 @@ public class DynamicService {
     }
 
     public Page<Document> findPaginated(String collectionName, Query query, int page, int size) {
-        // Cria o objeto Pageable
         Pageable pageable = PageRequest.of(page, size);
-
-        // Configura a paginação na query
         query.with(pageable);
 
-        // Obtém o total de documentos para a consulta
         long total = dynamicRepository.count(query, collectionName);
-
-        // Executa a consulta paginada
         List<Document> documents = dynamicRepository.find(query, collectionName);
 
-        // Retorna os resultados como um Page
         return new PageImpl<>(documents, pageable, total);
     }
-
-
 }
