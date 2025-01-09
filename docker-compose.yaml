@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mongo:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile.mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: admin
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  app:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile.app
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://admin:admin123@mongo:27017/admin
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:

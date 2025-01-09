@@ -1,6 +1,6 @@
 FROM mongo:latest
 ENV MONGO_INITDB_ROOT_USERNAME=admin \
     MONGO_INITDB_ROOT_PASSWORD=admin123
-COPY init-database.js /docker-entrypoint-initdb.d/
+COPY ./api/init-database.js /docker-entrypoint-initdb.d/
 EXPOSE 27017
 CMD ["mongod"]
