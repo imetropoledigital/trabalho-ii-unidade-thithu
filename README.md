@@ -30,7 +30,7 @@ Content-Type: application/json
 2. GET <strong>/{collectionName}?query={}&fields=campo1&page=0&size=5</strong> </br>
 Os parâmetros de rota são opcionais. Caso não sejam passados, é devolvida todas as entidades.
 3. GET <strong>/{collectionName}/id</strong> </br>
-4. PUT <strong>/{collectionName}</strong> </br>
+4. PUT <strong>/{collectionName}/id</strong> </br>
 Exemplo de requisição: </br>
 PUT /users/10
 Content-Type: application/json
