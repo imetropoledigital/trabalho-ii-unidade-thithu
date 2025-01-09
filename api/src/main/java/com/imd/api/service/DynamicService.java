@@ -2,26 +2,14 @@ package com.imd.api.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Sort;
-
 import com.imd.api.repository.DynamicRepository;
-
-import org.bson.types.ObjectId;
-
 import java.util.List;
-
 import org.bson.Document;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.BasicQuery;
-
-import org.springframework.data.domain.Page;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageImpl;
 
 
 @Service
@@ -37,10 +25,17 @@ public class DynamicService {
       return dynamicRepository.findAll(collectionName);
   }
 
-  public Document findById(String collectionName, ObjectId id) {
+/*   public Document findById(String collectionName, ObjectId id) {
         return dynamicRepository.findById(collectionName, id);
-    }
+    } */
 
+public Document findById(String collectionName, String id) {
+    // Criar uma query para buscar pelo campo _id
+    Query query = new Query(Criteria.where("_id").is(id));
+    // Executar a busca no MongoDB
+    return dynamicRepository.findOne(query, collectionName);
+}
+    
     public List<Document> find(String collectionName, Query query) {
         return dynamicRepository.find(query, collectionName);
     }

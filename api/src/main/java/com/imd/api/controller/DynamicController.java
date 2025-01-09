@@ -8,21 +8,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.data.mongodb.core.query.Query;
 import com.imd.api.service.DynamicService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import java.util.HashMap;
-import java.util.Map;
-import org.springframework.data.domain.Sort;
-
 
 import java.util.List;
 
@@ -132,7 +124,19 @@ public class DynamicController {
     
 
   @GetMapping("/{collectionName}/{id}")
-  public ResponseEntity<Document> getById(@PathVariable String collectionName, @PathVariable String id) {
+  public ResponseEntity<Document> getDocumentById(
+    @PathVariable String collectionName,
+    @PathVariable String id) {
+    // Chama o serviço para buscar o documento
+    Document document = dynamicService.findById(collectionName, id);
+
+    if (document == null) {
+        return ResponseEntity.notFound().build(); // Retorna 404 se não encontrado
+    }
+
+    return ResponseEntity.ok(document); // Retorna 200 com o documento
+    }
+  /* public ResponseEntity<Document> getById(@PathVariable String collectionName, @PathVariable String id) {
     try {
       ObjectId objectId = new ObjectId(id);
       Document document = dynamicService.findById(collectionName, objectId);
@@ -144,7 +148,7 @@ public class DynamicController {
     } catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest().body(null);
     }
-  }
+  } */
 
 
 
@@ -154,10 +158,9 @@ public class DynamicController {
           @PathVariable String id,
           @RequestBody Document updatedDocument) {
     try {
-      ObjectId objectId = new ObjectId(id);
-
-
-      Document existingDocument = dynamicService.findById(collectionName, objectId);
+      //ObjectId objectId = new ObjectId(id);
+      //Document existingDocument = dynamicService.findById(collectionName, objectId);
+      Document existingDocument = dynamicService.findById(collectionName, id);
 
       if (existingDocument == null) {
         return ResponseEntity.notFound().build();
