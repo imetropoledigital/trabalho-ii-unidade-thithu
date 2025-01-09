@@ -59,11 +59,11 @@ public class DynamicController {
                 List<Document> documents = dynamicService.findAll(collectionName);
                 return ResponseEntity.ok(documents);
             }
-    
+
             // Decodificar e criar a consulta Mongo
             String decodedQuery = query != null ? URLDecoder.decode(query, StandardCharsets.UTF_8) : "{}";
             BasicQuery mongoQuery = new BasicQuery(decodedQuery);
-    
+
             // Adiciona projeção, se fornecida
             if (fields != null && !fields.isBlank()) {
                 Document projection = new Document();
@@ -76,13 +76,13 @@ public class DynamicController {
                 }
                 mongoQuery.setFieldsObject(projection);
             }
-    
+
             // Retornar com paginação se page e size forem fornecidos
             if (page != null && size != null) {
                 Page<Document> result = dynamicService.findPaginated(collectionName, mongoQuery, page, size);
                 return ResponseEntity.ok(result);
             }
-    
+
             // Caso nenhuma das condições anteriores seja satisfeita
             return ResponseEntity.badRequest().body("Parâmetros inválidos ou insuficientes");
         } catch (Exception e) {
@@ -91,6 +91,44 @@ public class DynamicController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao processar a solicitação");
         }
     }
+
+//    @GetMapping("/{collectionName}")
+//    public ResponseEntity<?> getDocuments(
+//            @PathVariable String collectionName,
+//            @RequestParam(required = false) String query,
+//            @RequestParam(required = false) String fields,
+//            @RequestParam(required = false) Integer page,
+//            @RequestParam(required = false) Integer size
+//    ) {
+//        try {
+//            if (query == null || query.isBlank()) {
+//                return ResponseEntity.badRequest().body("O parâmetro 'query' é obrigatório.");
+//            }
+//
+//            String decodedQuery = URLDecoder.decode(query, StandardCharsets.UTF_8);
+//            BasicQuery mongoQuery = new BasicQuery(decodedQuery);
+//
+//            if (fields != null && !fields.isBlank()) {
+//                Document projection = new Document();
+//                for (String field : fields.split(",")) {
+//                    projection.put(field, field.startsWith("-") ? 0 : 1);
+//                }
+//                mongoQuery.setFieldsObject(projection);
+//            }
+//
+//            if (page != null && size != null) {
+//                Page<Document> result = dynamicService.findPaginated(collectionName, mongoQuery, page, size);
+//                return ResponseEntity.ok(result);
+//            }
+//
+//            List<Document> documents = dynamicService.findAll(collectionName);
+//            return ResponseEntity.ok(documents);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar a solicitação.");
+//        }
+//    }
     
 
   @GetMapping("/{collectionName}/{id}")
