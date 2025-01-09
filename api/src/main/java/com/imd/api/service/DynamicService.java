@@ -25,10 +25,6 @@ public class DynamicService {
       return dynamicRepository.findAll(collectionName);
   }
 
-/*   public Document findById(String collectionName, ObjectId id) {
-        return dynamicRepository.findById(collectionName, id);
-    } */
-
 public Document findById(String collectionName, String id) {
     // Criar uma query para buscar pelo campo _id
     Query query = new Query(Criteria.where("_id").is(id));

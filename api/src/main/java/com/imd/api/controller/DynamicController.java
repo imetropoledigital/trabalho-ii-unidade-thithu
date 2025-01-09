@@ -84,45 +84,6 @@ public class DynamicController {
         }
     }
 
-//    @GetMapping("/{collectionName}")
-//    public ResponseEntity<?> getDocuments(
-//            @PathVariable String collectionName,
-//            @RequestParam(required = false) String query,
-//            @RequestParam(required = false) String fields,
-//            @RequestParam(required = false) Integer page,
-//            @RequestParam(required = false) Integer size
-//    ) {
-//        try {
-//            if (query == null || query.isBlank()) {
-//                return ResponseEntity.badRequest().body("O parâmetro 'query' é obrigatório.");
-//            }
-//
-//            String decodedQuery = URLDecoder.decode(query, StandardCharsets.UTF_8);
-//            BasicQuery mongoQuery = new BasicQuery(decodedQuery);
-//
-//            if (fields != null && !fields.isBlank()) {
-//                Document projection = new Document();
-//                for (String field : fields.split(",")) {
-//                    projection.put(field, field.startsWith("-") ? 0 : 1);
-//                }
-//                mongoQuery.setFieldsObject(projection);
-//            }
-//
-//            if (page != null && size != null) {
-//                Page<Document> result = dynamicService.findPaginated(collectionName, mongoQuery, page, size);
-//                return ResponseEntity.ok(result);
-//            }
-//
-//            List<Document> documents = dynamicService.findAll(collectionName);
-//            return ResponseEntity.ok(documents);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao processar a solicitação.");
-//        }
-//    }
-    
-
   @GetMapping("/{collectionName}/{id}")
   public ResponseEntity<Document> getDocumentById(
     @PathVariable String collectionName,
@@ -136,21 +97,6 @@ public class DynamicController {
 
     return ResponseEntity.ok(document); // Retorna 200 com o documento
     }
-  /* public ResponseEntity<Document> getById(@PathVariable String collectionName, @PathVariable String id) {
-    try {
-      ObjectId objectId = new ObjectId(id);
-      Document document = dynamicService.findById(collectionName, objectId);
-      if (document != null) {
-        return ResponseEntity.ok(document);
-      } else {
-        return ResponseEntity.notFound().build();
-      }
-    } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().body(null);
-    }
-  } */
-
-
 
   @PutMapping("/{collectionName}/{id}")
   public ResponseEntity<Document> updateDocument(
@@ -158,8 +104,6 @@ public class DynamicController {
           @PathVariable String id,
           @RequestBody Document updatedDocument) {
     try {
-      //ObjectId objectId = new ObjectId(id);
-      //Document existingDocument = dynamicService.findById(collectionName, objectId);
       Document existingDocument = dynamicService.findById(collectionName, id);
 
       if (existingDocument == null) {
@@ -175,43 +119,4 @@ public class DynamicController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Retorna 500 em caso de erro
     }
   }
-
-  // Endpoint atualizado para buscar com filtro de consulta
-
-  // @GetMapping("/{collectionName}/query")
-  // public ResponseEntity<Page<Document>> getPaginated(
-  //         @PathVariable String collectionName, // Nome da coleção
-  //         @RequestParam String query,          // Consulta JSON
-  //         @RequestParam(required = false) String fields,
-  //         @RequestParam int page,              // Número da página
-  //         @RequestParam int size               // Tamanho da página
-  // ) {
-  //   try {
-  //     String decodedQuery = URLDecoder.decode(query, StandardCharsets.UTF_8);
-  //     BasicQuery mongoQuery = new BasicQuery(decodedQuery);
-  //     System.out.println(decodedQuery);
-
-  //     // Adiciona projeção, se fornecida
-  //     if (fields != null && !fields.isBlank()) {
-  //         Document projection = new Document();
-  //         for (String field : fields.split(",")) {
-  //             if (field.startsWith("-")) {
-  //                 projection.put(field.substring(1), 0); // Excluir campo
-  //             } else {
-  //                 projection.put(field, 1); // Incluir campo
-  //             }
-  //         }
-  //         mongoQuery.setFieldsObject(projection);
-  //     }
-
-  //     Page<Document> result = dynamicService.findPaginated(collectionName, mongoQuery, page, size);
-  //     return ResponseEntity.ok(result);
-  //   } catch (Exception e) {
-  //     // Log da exceção (opcional, para depuração)
-  //     e.printStackTrace();
-  //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-  //   }
-  // }
-
-
 }
